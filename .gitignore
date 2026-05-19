@@ -1,0 +1,14 @@
+# Python cache/artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environment
+venv/
+.venv/
+
+# Data artifacts
+data/
+
+# Generated outputs
+outputs/
