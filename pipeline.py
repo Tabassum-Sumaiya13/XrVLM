@@ -232,6 +232,10 @@ class DiagnosticPipeline:
         Record a radiologist correction and check if calibration
         update is needed.
         """
+        stage2_backend = "skipped" if not result.routed_to_stage2 else "unknown"
+        if result.routed_to_stage2 and result.stage2_result is not None:
+            stage2_backend = result.stage2_result.get("backend", stage2_backend)
+
         self.feedback.add_from_dict(
             image_id=result.image_id,
             pipeline_finding=result.final_finding,
@@ -241,6 +245,7 @@ class DiagnosticPipeline:
             was_routed_to_stage2=result.routed_to_stage2,
             conflict_detected=result.conflict_detected,
             notes=notes,
+            stage2_backend=stage2_backend,
             stage1_logits=result.stage1_probs.tolist(),  # store for recalibration
             stage1_probs=result.stage1_probs.tolist(),
             true_labels=true_labels,

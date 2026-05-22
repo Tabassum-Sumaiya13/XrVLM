@@ -46,10 +46,10 @@ STAGE1_EPOCHS_FINETUNE = 12
 BATCH_SIZE = 16                 # smaller for B4 at 380×380
 
 # ── Temperature scaling ─────────────────────────────────────────────────────
-TEMPERATURE_INIT = 1.5          # starting T (>1 = soften, <1 = sharpen)
+TEMPERATURE_INIT = 1.5         # starting T (>1 = soften, <1 = sharpen)
 
 # ── Routing threshold ───────────────────────────────────────────────────────
-ROUTING_THRESHOLD = 0.95        # τ — calibrated p ≥ τ  → skip Stage 2
+ROUTING_THRESHOLD = 0.65      # τ — calibrated p ≥ τ  → skip Stage 2
 
 # ── Stage 2 — VLM (CheXagent) ──────────────────────────────────────────────
 VLM_MODEL_ID  = "StanfordAIMI/CheXagent-2-3b"   # HF model ID

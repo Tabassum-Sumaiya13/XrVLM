@@ -60,6 +60,12 @@ class PipelineResult:
 
     def to_dict(self) -> dict:
         """Serialise for JSON / database storage."""
+        stage2_backend = "unknown"
+        stage2_is_fallback = None
+        if self.stage2_result is not None:
+            stage2_backend = self.stage2_result.get("backend", stage2_backend)
+            stage2_is_fallback = self.stage2_result.get("is_fallback", stage2_is_fallback)
+
         return {
             "image_id": self.image_id,
             "image_path": self.image_path,
@@ -79,6 +85,8 @@ class PipelineResult:
             },
             "stage2": {
                 "invoked": self.routed_to_stage2,
+                "backend": stage2_backend,
+                "is_fallback": stage2_is_fallback,
                 "finding": self.stage2_finding,
                 "confidence": round(self.stage2_confidence, 4),
                 "rationale": self.stage2_rationale,

@@ -350,13 +350,23 @@ class Stage2Engine:
             probs: Stage 1 probabilities (used for fallback)
         """
         if self.using_vlm and image is not None:
-            return self.vlm.analyze(image)
+            result = self.vlm.analyze(image)
+            # Make the backend explicit for downstream serialization.
+            result.setdefault("backend", "vlm")
+            result.setdefault("is_fallback", False)
+            return result
         elif logits is not None and probs is not None:
-            return self.fallback.analyze_from_logits(logits, probs)
+            result = self.fallback.analyze_from_logits(logits, probs)
+            result.setdefault("backend", "fallback")
+            result.setdefault("is_fallback", True)
+            return result
         else:
-            return self.fallback.analyze_from_logits(
+            result = self.fallback.analyze_from_logits(
                 np.zeros(NUM_CLASSES), np.ones(NUM_CLASSES) * 0.5
             )
+            result.setdefault("backend", "fallback")
+            result.setdefault("is_fallback", True)
+            return result
 
 
 # ── smoke test ───────────────────────────────────────────────────────────────

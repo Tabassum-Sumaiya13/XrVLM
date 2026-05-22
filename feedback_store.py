@@ -33,6 +33,9 @@ class CorrectionRecord:
     conflict_detected: bool              # was a conflict flagged?
     notes: str = ""                      # free-text radiologist notes
 
+    # Stage 2 provenance (VLM vs fallback)
+    stage2_backend: Optional[str] = None
+
     # For temperature recalibration
     stage1_logits: Optional[list] = None    # (14,) raw logits
     stage1_probs: Optional[list] = None     # (14,) calibrated probs
@@ -68,6 +71,7 @@ class FeedbackStore:
         was_routed_to_stage2: bool = False,
         conflict_detected: bool = False,
         notes: str = "",
+        stage2_backend: Optional[str] = None,
         stage1_logits: Optional[list] = None,
         stage1_probs: Optional[list] = None,
         true_labels: Optional[list] = None,
@@ -89,6 +93,7 @@ class FeedbackStore:
             was_routed_to_stage2=was_routed_to_stage2,
             conflict_detected=conflict_detected,
             notes=notes,
+            stage2_backend=stage2_backend,
             stage1_logits=stage1_logits,
             stage1_probs=stage1_probs,
             true_labels=true_labels,
