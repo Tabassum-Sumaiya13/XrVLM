@@ -30,6 +30,7 @@ class PipelineResult:
     image_path: str = ""
 
     # ── Stage 1 outputs ──────────────────────────────────────────────────
+    stage1_logits: np.ndarray = field(default_factory=lambda: np.zeros(14))
     stage1_probs: np.ndarray = field(default_factory=lambda: np.zeros(14))
     stage1_top_finding: str = ""
     stage1_top_prob: float = 0.0
@@ -135,15 +136,20 @@ class ReconciliationLayer:
         stage1_probs: np.ndarray,     # (14,) calibrated probabilities
         stage2_result: Optional[dict],  # structured VLM output or None
         routed_to_stage2: bool,
+        stage1_logits: Optional[np.ndarray] = None,  # (14,) raw logits
         temperature: float = 1.0,
         image_id: str = "",
         image_path: str = "",
     ) -> PipelineResult:
         """Produce a final PipelineResult from both stage outputs."""
 
+        if stage1_logits is None:
+            stage1_logits = np.zeros_like(stage1_probs)
+
         result = PipelineResult(
             image_id=image_id,
             image_path=image_path,
+            stage1_logits=stage1_logits,
             stage1_probs=stage1_probs,
             temperature=temperature,
             routed_to_stage2=routed_to_stage2,

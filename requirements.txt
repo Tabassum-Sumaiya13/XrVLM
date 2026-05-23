@@ -12,6 +12,7 @@ numpy
 pandas
 scikit-learn
 Pillow
+datasets>=2.0.0            # used by download_sample.py (HF streaming)
 
 # ── Visualisation ────────────────────────────────────────────────
 matplotlib
@@ -19,6 +20,9 @@ tqdm
 
 # ── Demo ─────────────────────────────────────────────────────────
 gradio>=4.0.0
+
+# ── Data download helpers (optional) ──────────────────────────────
+# kaggle
 
 # ── Experiment tracking (optional) ───────────────────────────────
 # wandb

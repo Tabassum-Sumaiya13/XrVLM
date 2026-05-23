@@ -173,6 +173,7 @@ class DiagnosticPipeline:
         # ── ⑤ Reconciliation ─────────────────────────────────────────────
         result = self.reconciler.reconcile(
             stage1_probs=probs,
+            stage1_logits=raw_logits.cpu().numpy()[0],
             stage2_result=stage2_result,
             routed_to_stage2=route_to_stage2,
             temperature=temperature,
@@ -246,7 +247,7 @@ class DiagnosticPipeline:
             conflict_detected=result.conflict_detected,
             notes=notes,
             stage2_backend=stage2_backend,
-            stage1_logits=result.stage1_probs.tolist(),  # store for recalibration
+            stage1_logits=result.stage1_logits.tolist(),  # store raw logits for recalibration
             stage1_probs=result.stage1_probs.tolist(),
             true_labels=true_labels,
         )

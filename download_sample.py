@@ -19,6 +19,37 @@ from tqdm import tqdm
 
 from config import RAW_DIR, DISEASE_LABELS
 
+
+def download_real_data(
+    dest_dir: Path = RAW_DIR,
+    n_batches: int = 1,
+    n_limit: int = None,
+) -> bool:
+    """
+    Backwards-compatible helper used by `run_sample.py`.
+
+    The repo originally described a Kaggle-based downloader; the current
+    implementation streams from Hugging Face instead.
+
+    Args:
+        dest_dir: Destination directory (typically `data/raw`).
+        n_batches: Kept for API compatibility. Used only to scale a default
+            when `n_limit` is not provided.
+        n_limit: Max number of images to download.
+
+    Returns:
+        True on success, False on failure.
+    """
+    try:
+        if n_limit is None:
+            # Historically, one "batch" was ~10k images. Keep a similar scale.
+            n_limit = int(max(1, n_batches)) * 10_000
+        download_streamed_data(n_samples=int(n_limit), dest_dir=dest_dir)
+        return True
+    except Exception as e:
+        print(f"[download_real_data] ERROR: {e}")
+        return False
+
 def download_streamed_data(n_samples: int = 100, dest_dir: Path = RAW_DIR):
     """
     Stream data from Hugging Face and save locally.

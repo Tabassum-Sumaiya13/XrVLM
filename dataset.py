@@ -217,7 +217,8 @@ def build_dataloaders(
     sampler = None
     if use_weighted_sampler and len(train_ds) > 0:
         label_sums = train_ds.df[DISEASE_LABELS].sum(axis=1).values
-        sample_weights = np.where(label_sums > 0, 1.0 / label_sums, 1.0)
+# Avoid division by zero
+        sample_weights = np.where(label_sums > 0, 1.0 / np.maximum(label_sums, 1e-8), 1.0)        
         sample_weights = torch.tensor(sample_weights, dtype=torch.float64)
         sampler = WeightedRandomSampler(
             weights=sample_weights,
